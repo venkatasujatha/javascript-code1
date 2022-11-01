@@ -8,8 +8,11 @@ const router = require("express").Router();
  router.put("/updateStudent/:id",studentController.updateStudent);
  router.delete("/deleteStudent/:id",studentController.deleteStudent);
  router.post('/bulkcreatestudents',studentController.bulkCreateStudent);
- router.put('/bulkUpdateStudents/:firstName',studentController.bulkUpdateStudent);
- router.delete('/bulkdelete/:firstName',studentController.bulkDelete)
+ //router.put('/bulkUpdateStudents/:firstName',studentController.bulkUpdateStudent);
+ router.put('/bulkUpdateStudents',studentController.bulkUpdateStudent);
+ //router.delete('/bulkdelete/:firstName',studentController.bulkDelete)
+ router.delete('/bulkdelete',studentController.bulkDelete);
+ router.post('/bulkTransancations',studentController.bulkTransactions);
 
  //router.put('/bulkUpdate',studentController.bulkUpdateStudent)
  

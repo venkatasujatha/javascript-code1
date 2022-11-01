@@ -14,7 +14,7 @@ const student = require('./entity/student');
 db.sync({alter: true}).then((data) => {
     console.log("table synced successfully")
 }).catch((err) => {
-    console.error(err).message;
+    console.error(err);
 })
 
 async function run() {

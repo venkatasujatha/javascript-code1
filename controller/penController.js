@@ -70,11 +70,13 @@ const deletePen = async(req, res) => {
 }
 //bulk create pens
 const bulkCreatePen = async(req,res)=>{
+    
     try
     {
+
        const resp= Pen.bulkCreate(req.body);
         console.log('Pens created successfully');
-        res.send(resp)
+        res.send(resp);
     }
     catch(err)
     {

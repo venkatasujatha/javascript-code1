@@ -12,7 +12,7 @@ const pen =db.define('Pen', {
     },
     brand:{
         type: Sequelize.DataTypes.STRING,
-        allowNULL: false
+        allowNull: false
     }
 },{
     freezeTableName:true,

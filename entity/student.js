@@ -13,11 +13,13 @@ const student =db.define('Student', {
     },
     firstName:{
         type: Sequelize.DataTypes.STRING,
-        allowNULL: false
+        //unique:true,
+        allowNull: false,
     },
     lastName:{
         type: Sequelize.DataTypes.STRING,
-        allowNULL: false
+        //unique:true,
+        allowNull: false,
     }
 },{
     freezeTableName:true,
