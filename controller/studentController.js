@@ -2,7 +2,6 @@ const Student = require("../entity/student");
 const Pen = require("../entity/pen");
 const db = require("../database");
 
-
 //post
 
 const add = async (req, res) => {
@@ -139,7 +138,7 @@ const bulkUpdateStudent = async (req, res) => {
 };
 //bulk delete
 const bulkDelete = async (req, res) => {
-    const t= await db.transaction();
+  const t = await db.transaction();
   try {
     // await Student.destroy({where:{}});
     //console.log("records deleted successfully");
@@ -147,11 +146,14 @@ const bulkDelete = async (req, res) => {
     var resp;
     const student1 = req.body;
     for (let i = 0; i <= student1.length - 1; i++) {
-      resp = await Student.destroy({
-        where: {
-          id: student1[i].id,
+      resp = await Student.destroy(
+        {
+          where: {
+            id: student1[i].id,
+          },
         },
-      },{transaction:t});
+        { transaction: t }
+      );
     }
     await t.commit();
 
@@ -162,29 +164,43 @@ const bulkDelete = async (req, res) => {
   }
 };
 
-const bulkTransactions =async (req, res) => {
-  let transaction;
-    try {
-        transaction = await db.transaction();
-        
-        await Student.create(req.body,{include: [
+const bulkTransactions = async (req, res) => {
+  const t = await db.transaction();
+  try {
+    await Student.bulkCreate(
+      req.body[0],
+      {
+        include: [
           {
             model: Pen,
           },
-        ],  }, { transaction});
+        ],
+      },
+      { transaction: t }
+    );
+    await Student.findOne(
+      { id: req.body[1].id },
+      {
+        transaction: t,
+      }
+    );
+    await Student.update(
+      req.body[2],
+      {
+        where: {
+          id: req.body[2].id,
+        },
+      },
+      {
+        transaction: t,
+      }
+    );
 
-        await Student.destroy({ where: {id: req.params.id }, transaction });
-
-        await Student.update(req.body, { where: {id: req.params.id }, transaction });
-
-        await transaction.commit();
-
-    } catch (err) {
-        if(transaction) {
-           await transaction.rollback();
-        }
-    }
-}
+    await t.commit();
+  } catch (err) {
+    await t.rollback();
+  }
+};
 
 module.exports = {
   add,
@@ -194,5 +210,6 @@ module.exports = {
   deleteStudent,
   bulkCreateStudent,
   bulkUpdateStudent,
-  bulkDelete,bulkTransactions
+  bulkDelete,
+  bulkTransactions,
 };
